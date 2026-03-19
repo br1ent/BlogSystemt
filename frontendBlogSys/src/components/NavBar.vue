@@ -5,10 +5,14 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'home'}">主页</router-link>
+                        <router-link :class="route_name === 'home' ? 'nav-link active' : 'nav-link'" :to="{name: 'home'}">
+                            主页
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'article'}">文章</router-link>
+                        <router-link :class="route_name === 'article' ? 'nav-link active' : 'nav-link'" :to="{name: 'article'}">
+                            文章
+                        </router-link>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -33,6 +37,11 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const route_name = computed(() => route.name);
 
 </script>
 
