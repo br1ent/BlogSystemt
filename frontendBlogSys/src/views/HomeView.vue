@@ -29,9 +29,13 @@
             <div class="card border-0 shadow-sm">
               <div class="card-header bg-white fw-bold">关于博主</div>
               <div class="card-body text-center">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
-                     class="rounded-circle mb-3" width="80" alt="avatar">
-                <h5 class="card-title">Brent</h5>
+                <img :src="userStore.photo || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'" 
+                    class="rounded-circle mb-3" 
+                    width="80" 
+                    height="80"
+                    style="object-fit: cover;"
+                    alt="avatar">
+                <h5 class="card-title">{{userStore.username}}</h5>
                 <p class="card-text small text-muted">
                   软件工程大三学生 | Java 全栈开发爱好者<br>
                   正在练习 Spring Boot + Vue 3 项目
@@ -51,11 +55,12 @@
 <script setup>
 import ContentField from '../components/ContentField.vue'
 import { onMounted } from 'vue'
+import { useUserStore } from '../stores/user'
 
-onMounted(() => {
-// 这里以后可以写获取文章列表的逻辑
-})
+const userStore = useUserStore();
+
 </script>
+
 
 <style scoped>
 /* 让卡片看起来更现代，增加一点悬停效果 */

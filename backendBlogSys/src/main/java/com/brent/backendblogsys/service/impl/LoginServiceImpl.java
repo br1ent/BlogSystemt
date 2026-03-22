@@ -67,7 +67,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (Boolean.TRUE.equals(deleted)) {
             SecurityContextHolder.clearContext();
-            return Result.success("退出成功");
+            return Result.success();
         }
 
         return Result.fail("退出失败或已在其他地方退出");

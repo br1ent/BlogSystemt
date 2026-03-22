@@ -26,6 +26,10 @@
                                 注册
                                 </router-link>
                                 一个。
+                                <router-link :to="{name: 'forgetpwd'}" 
+                                class="link-offset-2 link-underline link-underline-opacity-25">
+                                    忘记密码？
+                                </router-link>
                             </div>
                         </form>
                     </div>
