@@ -5,7 +5,7 @@
         <h5 class="card-title">{{ title }}</h5>
         <p class="card-text text-secondary">{{ descript }}</p>
   
-        <hr class="border border-dark opacity-75" />
+        <hr class="border border-lightgrey opacity-75" />
   
         <!-- 图标区 -->
         <div class="icons">
@@ -43,7 +43,7 @@
   
         <!-- 评论区 -->
         <div class="container text-center mt-4" v-if="showComments">
-            <hr class="border border-dark opacity-75" />
+            <hr class="border border-lightgrey opacity-75" />
             <div class="row">
                 <div class="col-1">
                 <img
