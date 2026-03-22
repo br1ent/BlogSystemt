@@ -1,10 +1,12 @@
 ﻿import { createRouter, createWebHistory } from 'vue-router'
 
-
 const ArticleView = () => import('../views/ArticleView.vue')
 const HomeView = () => import('../views/HomeView.vue')
 const UserProfileView = () => import('../views/UserProfileView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
+const LoginView = () => import('../views/user/LoginView.vue')
+const RegisterView = () => import ('../views/user/RegisterView.vue')
+const ForgetPasswordView = () => import('../views/user/ForgetPasswordView.vue')
 
 
 // 配置路由映射表
@@ -23,6 +25,21 @@ const routes = [
     path: '/userprofile/:id',
     name: 'userprofile',
     component: UserProfileView,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+  },
+  {
+    path: '/forgetpwd',
+    name: 'forgetpwd',
+    component: ForgetPasswordView,
   },
   {
     path: '/404',

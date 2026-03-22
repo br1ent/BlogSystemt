@@ -13,3 +13,10 @@ spring:
       name: admin
       password: 123456
 
+logging:
+  # ?????????????
+  level:
+    root: info # ????? info
+    com.brent.backendblogsys: debug # ??????? debug???? log.debug()
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
