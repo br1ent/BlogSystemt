@@ -3,7 +3,7 @@ package com.brent.backendblogsys.pojo.dto;
 import lombok.Data;
 
 @Data
-public class LoginDTO {
+public class UserLoginDTO {
     private String email;
     private String password;
 }

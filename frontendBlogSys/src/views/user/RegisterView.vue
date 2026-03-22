@@ -2,7 +2,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-11 col-sm-8 col-md-6 col-lg-4">
-                <div class="card shadow-sm"> <div class="card-body">
+                <div class="card shadow-sm"> 
+                    <div class="card-body">
                         <h4 class="card-title text-center mb-4">注册</h4>
                         <form @submit.prevent="register">
                             <div class="mb-3">

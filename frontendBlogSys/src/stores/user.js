@@ -1,6 +1,5 @@
 ﻿import { defineStore } from 'pinia';
 import axios from 'axios';
-import { tr } from 'element-plus/es/locale/index.mjs';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -50,7 +49,22 @@ export const useUserStore = defineStore('user', {
                     confirmedPassword: data.confirmedPassword,
                 });
                 return resp.data;
-            } catch (err) {
+            } catch(err) {
+                return { code: 500, msg: "服务器连接失败" };
+            }
+        },
+
+        async resetPassword(data) {
+            try {
+                const resp = await axios.post("http://localhost:8080/api/auth/forgetpwd", {
+                    username: data.username,
+                    email: data.email,
+                    newPassword: data.newPassword,
+                    confirmPassword: data.confirmPassword,
+                });
+
+                return resp.data;
+            } catch(err) {
                 return { code: 500, msg: "服务器连接失败" };
             }
         },

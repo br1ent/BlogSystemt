@@ -64,6 +64,6 @@ public class RegisterServiceImpl implements RegisterService {
         user.setIsValued(1);
 
         userMapper.insert(user);
-        return Result.success();
+        return Result.success("注册成功!", null);
     }
 }
