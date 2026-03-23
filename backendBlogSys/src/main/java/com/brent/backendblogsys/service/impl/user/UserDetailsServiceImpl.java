@@ -1,4 +1,4 @@
-package com.brent.backendblogsys.service.impl;
+package com.brent.backendblogsys.service.impl.user;
 
 import com.brent.backendblogsys.mapper.UserMapper;
 import com.brent.backendblogsys.pojo.User; // 确保导入的是你自己的实体类

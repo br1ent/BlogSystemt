@@ -11,7 +11,7 @@
                     </li>
                     <li class="nav-item">
                         <router-link :class="route_name === 'article' ? 'nav-link active' : 'nav-link'" :to="{name: 'article'}">
-                            文章
+                            文章发布
                         </router-link>
                     </li>
                 </ul>

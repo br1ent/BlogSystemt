@@ -1,12 +1,12 @@
 package com.brent.backendblogsys.common.utils;
 
-import com.brent.backendblogsys.pojo.User;
-import com.brent.backendblogsys.service.impl.UserDetailsImpl;
+import com.brent.backendblogsys.service.impl.user.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Objects;
 
+@Slf4j
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
@@ -31,6 +32,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
 
         if (!StringUtils.hasText(token) || !token.startsWith("Bearer ")) {
+            log.info("Filter检测：未携带Token");
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,10 +53,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        log.info("Filter检测：Token解析成功，UserId: {}", userId);
+
         String redisKey = "login:" + userId;
         UserDetailsImpl loginUser = (UserDetailsImpl) redisTemplate.opsForValue().get(redisKey);
 
         if (Objects.isNull(loginUser)) {
+            log.info("Filter检测：Redis中找不到Key: {}", redisKey);
             filterChain.doFilter(request, response);
             return;
         }
@@ -63,6 +68,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        log.info("Filter检测：用户信息已存入上下文: ", loginUser.getUsername());
 
         // 5. 放行
         filterChain.doFilter(request, response);

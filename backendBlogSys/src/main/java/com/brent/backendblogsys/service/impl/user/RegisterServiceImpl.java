@@ -1,4 +1,4 @@
-package com.brent.backendblogsys.service.impl;
+package com.brent.backendblogsys.service.impl.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.brent.backendblogsys.mapper.UserMapper;

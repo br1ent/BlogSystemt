@@ -1,4 +1,4 @@
-package com.brent.backendblogsys.service.impl;
+package com.brent.backendblogsys.service.impl.user;
 
 import com.brent.backendblogsys.common.utils.JwtUtil;
 import com.brent.backendblogsys.pojo.result.Result;

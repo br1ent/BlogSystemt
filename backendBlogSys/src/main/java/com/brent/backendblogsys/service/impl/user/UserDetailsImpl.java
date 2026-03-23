@@ -1,6 +1,7 @@
-package com.brent.backendblogsys.service.impl;
+package com.brent.backendblogsys.service.impl.user;
 
 import com.brent.backendblogsys.pojo.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class UserDetailsImpl implements UserDetails {
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }

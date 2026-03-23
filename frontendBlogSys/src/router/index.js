@@ -18,7 +18,7 @@ const routes = [
     component: HomeView,
     meta: {
       title: "个人博客",
-      requestAuth: false,
+      requestAuth: true,
     }
   },
   {
