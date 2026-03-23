@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +32,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 1. 开启 CORS 支持（它会自动寻找 CorsConfig 或者在此处定义的 CorsFilter）
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
+                        // 2. 关键：显式放行所有的 OPTIONS 请求，确保预检通过
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/api/auth/login",
                                 "/api/auth/register",
-                                "/api/auth/forgetpwd",
-                                "/api/article/add",
-                                "/api/article/delete/{id}",
-                                "/api/article/getlist"
+                                "/api/auth/forgetpwd"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -63,13 +63,15 @@
 import ContentField from '../../components/ContentField.vue'
 import { onMounted, ref, computed } from 'vue'
 import axios from 'axios'
+import { useUserStore } from '../../stores/user';
 
 const articles = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(5);
 const searchKeyword = ref("");
-const lastSearchKeyword = ref(""); // 用于展示搜索结果时的一致性
+const lastSearchKeyword = ref("");
+const userStore = useUserStore();
 
 // 1. 高亮逻辑函数
 const getHighlightedText = (text) => {
@@ -104,23 +106,32 @@ const pages = computed(() => {
 });
 
 const pull_page = page => {
+  console.log("当前Token:", userStore.token);
   if (page < 1) return;
   let max_pages = Math.ceil(total.value / pageSize.value);
   if (total.value > 0 && page > max_pages) return;
 
   currentPage.value = page;
   axios.get("http://localhost:8080/api/article/getlist", {
-    params: {
-      page: page,
-      size: pageSize.value,
-      keyword: searchKeyword.value
-    }
+      params: {
+        page: page,
+        size: pageSize.value,
+        keyword: searchKeyword.value
+  },
+      headers: {
+        Authorization: "Bearer " + userStore.token,
+  }
   }).then(resp => {
-    if (resp.data.msg === "获取成功" || resp.data.code === 200) {
-      articles.value = resp.data.data.records;
-      total.value = resp.data.data.total;
-      lastSearchKeyword.value = searchKeyword.value;
+      if (resp.data.msg === "获取成功" || resp.data.code === 200) {
+        articles.value = resp.data.data.records;
+        total.value = resp.data.data.total;
+        lastSearchKeyword.value = searchKeyword.value;
     }
+  }).catch(err => {
+      console.error("请求失败:", err);
+      if (err.response && err.response.status === 403) {
+          console.error("权限不足或Token失效");
+      }
   });
 }
 
