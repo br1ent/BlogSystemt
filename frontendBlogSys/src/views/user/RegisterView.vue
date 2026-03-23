@@ -1,37 +1,39 @@
 ﻿<template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-11 col-sm-8 col-md-6 col-lg-4">
-                <div class="card shadow-sm"> 
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4">注册</h4>
-                        <form @submit.prevent="register">
-                            <div class="mb-3">
-                                <label for="userName" class="form-label">用户名</label>
-                                <input type="text" class="form-control" id="userName" v-model="userName">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Email" class="form-label">邮箱地址</label>
-                                <input type="email" class="form-control" id="Email" v-model="email">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Password" class="form-label">密码</label>
-                                <input type="password" class="form-control" id="Password" v-model="password">
-                            </div>
-                            <div class="mb-3">
-                                <label for="ConfirmPassword" class="form-label">确认密码</label>
-                                <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmedPassword">
-                            </div>
-                            <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
-                            <button type="submit" class="btn btn-primary w-100">注册</button>
-                            <div class="login">
+    <div class="auth-page-wrapper">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+                    <div class="card shadow-sm border-0"> 
+                        <div class="card-body">
+                            <AuthBrand />
+                            <form @submit.prevent="register">
+                                <div class="mb-3">
+                                    <label for="userName" class="form-label">用户名</label>
+                                    <input type="text" class="form-control" id="userName" v-model="userName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Email" class="form-label">邮箱地址</label>
+                                    <input type="email" class="form-control" id="Email" v-model="email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Password" class="form-label">密码</label>
+                                    <input type="password" class="form-control" id="Password" v-model="password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ConfirmPassword" class="form-label">确认密码</label>
+                                    <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmedPassword">
+                                </div>
+                                <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
+                                <button type="submit" class="btn btn-primary w-100">注册</button>
+                            </form>
+                            <div class="login mt-3" style="text-align: center">
                                 已有账号？点击
                                 <router-link :to="{name: 'login'}" 
                                 class="link-offset-2 link-underline link-underline-opacity-25">
                                 返回
                                 </router-link>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,11 +88,16 @@ const register = async () => {
 </script>
 
 <style scoped>
-.container {
-    margin-top: 20vh;
+.auth-page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f0f2f5;
 }
 
-div.login {
-    margin-top: 10px;
+.card {
+  border-radius: 1rem;
 }
 </style>

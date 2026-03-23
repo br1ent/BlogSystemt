@@ -47,9 +47,9 @@
 </template>
 
 <script setup>
-import ContentField from '../components/ContentField.vue'
+import ContentField from '../../components/ContentField.vue'
 import { onMounted } from 'vue'
-import { useUserStore } from '../stores/user'
+import { useUserStore } from '../../stores/user'
 
 const userStore = useUserStore();
 

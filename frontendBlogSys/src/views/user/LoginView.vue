@@ -1,41 +1,34 @@
 ﻿<template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-11 col-sm-8 col-md-6 col-lg-4">
-                <div class="card shadow-sm"> <div class="card-body">
-                        <h4 class="card-title text-center mb-4">登录</h4>
-                        <form @submit.prevent="login">
-                            <div class="mb-3">
-                                <label for="Email" class="form-label">邮箱地址</label>
-                                <input type="email" class="form-control" id="Email" v-model="email">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Password" class="form-label">密码</label>
-                                <input type="password" class="form-control" id="Password" v-model="password">
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="Check">
-                                <label class="form-check-label" for="Check">记住我</label>
-                            </div>
-                            <div class="text-danger">{{ err_msg }}</div>
-                            <button type="submit" class="btn btn-primary w-100">登录</button>
-                            <div class="register">
-                                还没有账号？点击
-                                <router-link :to="{name: 'register'}" 
-                                class="link-offset-2 link-underline link-underline-opacity-25">
-                                注册
-                                </router-link>
-                                一个。
-                                <router-link :to="{name: 'forgetpwd'}" 
-                                class="link-offset-2 link-underline link-underline-opacity-25">
-                                    忘记密码？
-                                </router-link>
-                            </div>
-                        </form>
-                    </div>
+    <div class="auth-page-wrapper">
+      <div class="container">
+        <div class="row justify-content-center m-0">
+          <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+            <div class="card shadow-lg border-0"> 
+              <div class="card-body p-4">
+                <AuthBrand />
+                
+                <form @submit.prevent="login">
+                  <div class="mb-3">
+                    <label class="form-label fw-bold small">邮箱地址</label>
+                    <input type="email" class="form-control" v-model="email">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fw-bold small">密码</label>
+                    <input type="password" class="form-control" v-model="password">
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 py-2 mt-2">登录</button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                   <router-link :to="{name: 'register'}" class="small text-decoration-none">注册账号</router-link>
+                   <span class="mx-2 text-muted">|</span>
+                   <router-link :to="{name: 'forgetpwd'}" class="small text-decoration-none text-muted">忘记密码</router-link>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 </template>
 
@@ -44,6 +37,7 @@
 import router from '../../router';
 import { useUserStore } from '../../stores/user';
 import { ref } from 'vue';
+import AuthBrand from '../../components/AuthBrand.vue';
 
 const userStore = useUserStore();
 const email = ref("");
@@ -68,10 +62,16 @@ const login = async () => {
 </script>
 
 <style scoped>
-.container {
-    margin-top: 20vh;
+.auth-page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f0f2f5;
 }
-div.register {
-    margin-top: 10px;
+
+.card {
+  border-radius: 1rem;
 }
 </style>

@@ -15,7 +15,7 @@
                         </router-link>
                     </li>
                 </ul>
-                <ul class="navbar-nav" v-if="userStore.is_login">
+                <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ userStore.username }}
@@ -29,14 +29,6 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#" @click="logout">退出</a></li>
                         </ul>
-                    </li>
-                </ul>
-                <ul class="navbar-nav" v-else>  
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'login'}">登录</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'register'}">注册</router-link>
                     </li>
                 </ul>
             </div>

@@ -1,39 +1,41 @@
 ﻿<template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-11 col-sm-8 col-md-6 col-lg-4">
-                <div class="card shadow-sm"> 
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4">重置密码</h4>
-                        <form @submit.prevent="handleReset">
-                            <div class="mb-3">
-                                <label for="userName" class="form-label">用户名</label>
-                                <input type="text" class="form-control" id="userName" v-model="userName">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Email" class="form-label">邮箱地址</label>
-                                <input type="email" class="form-control" id="Email" v-model="email">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Password" class="form-label">新密码</label>
-                                <input type="password" class="form-control" id="Password" v-model="password">
-                            </div>
-                            <div class="mb-3">
-                                <label for="ConfirmPassword" class="form-label">确认新密码</label>
-                                <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmPassword">
-                            </div>
-                            <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
-                            
-                            <div>
-                                <button type="submit" class="btn btn-primary w-100 mb-2">确认重置</button>
-                            </div>
-                            
-                            <div class="login">
-                                <button type="button" class="btn btn-outline-secondary w-100" @click="router.push({name: 'login'})">
-                                返回登录
-                                </button>
-                            </div>
-                        </form>
+    <div class="auth-page-wrapper">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+                    <div class="card shadow-sm border-0"> 
+                        <div class="card-body">
+                            <AuthBrand />
+                            <form @submit.prevent="handleReset">
+                                <div class="mb-3">
+                                    <label for="userName" class="form-label">用户名</label>
+                                    <input type="text" class="form-control" id="userName" v-model="userName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Email" class="form-label">邮箱地址</label>
+                                    <input type="email" class="form-control" id="Email" v-model="email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Password" class="form-label">新密码</label>
+                                    <input type="password" class="form-control" id="Password" v-model="password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ConfirmPassword" class="form-label">确认新密码</label>
+                                    <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmPassword">
+                                </div>
+                                <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
+                                
+                                <div>
+                                    <button type="submit" class="btn btn-primary w-100 mb-2">确认重置</button>
+                                </div>
+                                
+                                <div class="login">
+                                    <button type="button" class="btn btn-outline-secondary w-100" @click="router.push({name: 'login'})">
+                                    返回登录
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,11 +89,16 @@ const handleReset = async () => {
 </script>
   
 <style scoped>
-.container {
-    margin-top: 20vh;
+.auth-page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f0f2f5;
 }
 
-div.login {
-    margin-top: 10px;
+.card {
+  border-radius: 1rem;
 }
 </style>

@@ -1,9 +1,9 @@
 ﻿import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../stores/user'
 
-const ArticleView = () => import('../views/ArticleView.vue')
-const HomeView = () => import('../views/HomeView.vue')
-const UserProfileView = () => import('../views/UserProfileView.vue')
+const ArticleView = () => import('../views/article/ArticleView.vue')
+const HomeView = () => import('../views/article/HomeView.vue')
+const UserProfileView = () => import('../views/user/UserProfileView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
 const LoginView = () => import('../views/user/LoginView.vue')
 const RegisterView = () => import ('../views/user/RegisterView.vue')
@@ -57,7 +57,7 @@ const routes = [
       requestAuth: false,
     }
   },
-  {
+  { 
     path: '/forgetpwd',
     name: 'forgetpwd',
     component: ForgetPasswordView,
