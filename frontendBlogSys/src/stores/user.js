@@ -31,12 +31,12 @@ export const useUserStore = defineStore('user', {
                     localStorage.setItem("username", this.username);
                     localStorage.setItem("photo", this.photo);
                     
-                    return "success";
+                    return "success"
                 } else {
-                    return resp.data.message;
+                    return resp.data.msg || "登录失败";
                 }
             } catch (err) {
-                return { code: 500, msg: "服务器连接失败" };
+                return "服务器连接失败";
             }
         },
 
@@ -48,9 +48,10 @@ export const useUserStore = defineStore('user', {
                     password: data.password,
                     confirmedPassword: data.confirmedPassword,
                 });
-                return resp.data;
+                return resp.data.msg;
+
             } catch(err) {
-                return { code: 500, msg: "服务器连接失败" };
+                return { code: 500, msg: "网络连接异常" };
             }
         },
 
@@ -63,9 +64,10 @@ export const useUserStore = defineStore('user', {
                     confirmPassword: data.confirmPassword,
                 });
 
-                return resp.data;
+                return resp.data.msg;
+                
             } catch(err) {
-                return { code: 500, msg: "服务器连接失败" };
+                return { code: 500, msg: "网络连接异常" };
             }
         },
 

@@ -6,9 +6,11 @@ import com.brent.backendblogsys.service.user.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,30 +27,41 @@ public class LoginServiceImpl implements LoginService {
     private RedisTemplate<String, Object> redisTemplate;
     @Override
     public Result<Map<String, String>> login(String email, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, password);
 
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+            Authentication authenticate =
+                    authenticationManager.authenticate(authenticationToken);
 
-        if (Objects.isNull(authenticate)) {
-            return Result.fail("邮箱或密码错误");
+            UserDetailsImpl loginUser = (UserDetailsImpl) authenticate.getPrincipal();
+            String userId = loginUser.getUser().getId().toString();
+
+            // 存 Redis
+            redisTemplate.opsForValue().set(
+                    "login:" + userId,
+                    loginUser,
+                    24,
+                    TimeUnit.HOURS
+            );
+
+            String jwt = JwtUtil.createJWT(userId);
+
+            Map<String, String> map = new HashMap<>();
+            map.put("token", jwt);
+            map.put("photo", loginUser.getUser().getPhoto());
+            map.put("id", userId);
+            map.put("username", loginUser.getUser().getUsername());
+
+            return Result.success("登录成功", map);
+
+        } catch (BadCredentialsException e) {
+            return Result.fail(401, "邮箱或密码错误");
+        } catch (UsernameNotFoundException e) {
+            return Result.fail(401, "邮箱不存在");
+        } catch (Exception e) {
+            return Result.fail(500, "服务器异常，请稍后再试");
         }
-
-        UserDetailsImpl loginUser = (UserDetailsImpl) authenticate.getPrincipal();
-        String userId = loginUser.getUser().getId().toString();
-
-        // 将完整的用户信息存入 Redis，设置 24 小时过期
-        String redisKey = "login:" + userId;
-        redisTemplate.opsForValue().set(redisKey, loginUser, 24, TimeUnit.HOURS);
-
-        String jwt = JwtUtil.createJWT(userId);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("token", jwt);
-        map.put("photo", loginUser.getUser().getPhoto());
-        map.put("id", userId);
-        map.put("username", loginUser.getUser().getUsername());
-
-        return Result.success("登录成功", map);
     }
 
     @Override

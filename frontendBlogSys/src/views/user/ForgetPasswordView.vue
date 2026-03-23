@@ -8,19 +8,19 @@
                             <AuthBrand />
                             <form @submit.prevent="handleReset">
                                 <div class="mb-3">
-                                    <label for="userName" class="form-label">用户名</label>
+                                    <label for="userName" class="form-label fw-bold small">用户名</label>
                                     <input type="text" class="form-control" id="userName" v-model="userName">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="Email" class="form-label">邮箱地址</label>
+                                    <label for="Email" class="form-label fw-bold small">邮箱地址</label>
                                     <input type="email" class="form-control" id="Email" v-model="email">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="Password" class="form-label">新密码</label>
+                                    <label for="Password" class="form-label fw-bold small">新密码</label>
                                     <input type="password" class="form-control" id="Password" v-model="password">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="ConfirmPassword" class="form-label">确认新密码</label>
+                                    <label for="ConfirmPassword" class="form-label fw-bold small">确认新密码</label>
                                     <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmPassword">
                                 </div>
                                 <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
@@ -81,7 +81,7 @@ const handleReset = async () => {
         alert("密码重置成功!");
         router.push({name: 'login'});
     } else {
-        errMsg.value = resp.msg || "重置失败！"
+        errMsg.value = resp || "重置失败！"
     }
 }
 
