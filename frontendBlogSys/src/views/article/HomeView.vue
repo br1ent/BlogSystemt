@@ -7,8 +7,14 @@
             <div class="card-header bg-white fw-bold border-bottom-0 pt-3">搜索文章</div>
             <div class="card-body">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="输入关键词...">
-                <button class="btn btn-primary px-4">搜索</button>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="输入关键词..." 
+                  v-model="searchKeyword" 
+                  @keyup.enter="onSearch"
+                >
+                <button class="btn btn-primary px-4" @click="onSearch">搜索</button>
               </div>
             </div>
           </div>
@@ -17,27 +23,34 @@
 
       <div class="row">
         <div class="col-12">
-          <div class="card mb-4 border-0 shadow-sm" v-for="i in 3" :key="i">
+          <div class="card mb-4 border-0 shadow-sm" v-for="article in articles" :key="article.id">
             <div class="card-body">
-              <div class="text-muted small mb-2">发布于 2026-03-22</div>
-              <h3 class="card-title h4">Spring Security + JWT + Redis 实现无状态登录</h3>
-              <p class="card-text text-secondary">
-                在这篇文章中，我们将详细探讨如何利用 Spring Security 框架配合 JWT 和 Redis 缓存来构建一个安全的高并发登录系统...
-              </p>
+              <div class="text-muted small mb-2">发布于 {{ article.createTime || '获取时间失败' }}</div>
+              <h3 class="card-title h4" v-html="getHighlightedText(article.title)"></h3>
+              <p class="card-text text-secondary" v-html="getHighlightedText(article.description)"></p>
               <a href="#" class="btn btn-link p-0 text-decoration-none">阅读全文 →</a>
             </div>
           </div>
-          <nav aria-label="Page navigation" class="mt-5">
+
+          <div v-if="articles.length === 0" class="text-center text-muted my-5">没有找到相关文章</div>
+
+          <nav aria-label="Page navigation" class="mt-5" v-if="total > 0">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">上一页</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#">下一页</a>
-                </li>
+              <li :class="['page-item', currentPage <= 1 ? 'disabled' : '']">
+                <a class="page-link" href="#" @click.prevent="pull_page(currentPage - 1)">上一页</a>
+              </li>
+              
+              <li 
+                v-for="page in pages" 
+                :key="page.number" 
+                :class="['page-item', page.is_active ? 'active' : '']"
+              >
+                <a class="page-link" href="#" @click.prevent="pull_page(page.number)">{{ page.number }}</a>
+              </li>
+              
+              <li :class="['page-item', currentPage * pageSize >= total ? 'disabled' : '']">
+                <a class="page-link" href="#" @click.prevent="pull_page(currentPage + 1)">下一页</a>
+              </li>
             </ul>
           </nav>
         </div>
@@ -48,27 +61,102 @@
 
 <script setup>
 import ContentField from '../../components/ContentField.vue'
-import { onMounted } from 'vue'
-import { useUserStore } from '../../stores/user'
+import { onMounted, ref, computed } from 'vue'
+import axios from 'axios'
 
-const userStore = useUserStore();
+const articles = ref([]);
+const total = ref(0);
+const currentPage = ref(1);
+const pageSize = ref(5);
+const searchKeyword = ref("");
+const lastSearchKeyword = ref(""); // 用于展示搜索结果时的一致性
 
+// 1. 高亮逻辑函数
+const getHighlightedText = (text) => {
+  if (!text) return "";
+  if (!lastSearchKeyword.value) return text;
+  
+  // 使用正则匹配，'gi' 表示全局且不区分大小写
+  const reg = new RegExp(`(${lastSearchKeyword.value})`, 'gi');
+  return text.replace(reg, '<span class="highlight">$1</span>');
+}
+
+// 2. 分页器逻辑计算 (最多显示5页)
+const pages = computed(() => {
+  let max_pages = Math.ceil(total.value / pageSize.value);
+  let new_pages = [];
+  
+  // 计算起始页和结束页，确保当前页尽量在中间
+  let start = Math.max(1, currentPage.value - 2);
+  let end = Math.min(max_pages, start + 4);
+  
+  if (end - start < 4) {
+    start = Math.max(1, end - 4);
+  }
+
+  for (let i = start; i <= end; i++) {
+    new_pages.push({
+      number: i,
+      is_active: i === currentPage.value
+    });
+  }
+  return new_pages;
+});
+
+const pull_page = page => {
+  if (page < 1) return;
+  let max_pages = Math.ceil(total.value / pageSize.value);
+  if (total.value > 0 && page > max_pages) return;
+
+  currentPage.value = page;
+  axios.get("http://localhost:8080/api/article/getlist", {
+    params: {
+      page: page,
+      size: pageSize.value,
+      keyword: searchKeyword.value
+    }
+  }).then(resp => {
+    if (resp.data.msg === "获取成功" || resp.data.code === 200) {
+      articles.value = resp.data.data.records;
+      total.value = resp.data.data.total;
+      lastSearchKeyword.value = searchKeyword.value;
+    }
+  });
+}
+
+const onSearch = () => {
+  currentPage.value = 1; 
+  pull_page(1);
+}
+
+onMounted(() => {
+  pull_page(currentPage.value);
+});
 </script>
 
-
 <style scoped>
+/* 高亮样式 */
+:deep(.highlight) {
+  color: #d93025;
+  background-color: rgba(217, 48, 37, 0.1);
+  font-weight: bold;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
 .card {
-transition: all 0.3s ease;
-border-radius: 12px;
+  transition: all 0.3s ease;
+  border-radius: 12px;
 }
-
 .card:hover {
-transform: translateY(-3px);
-box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
 }
-
 .card-title {
-color: #2c3e50;
-font-weight: 600;
+  color: #2c3e50;
+  font-weight: 600;
+}
+.page-link {
+  cursor: pointer;
 }
 </style>

@@ -114,7 +114,6 @@ const publishArticle = () => {
 <style>
 /* 全局覆盖编辑器样式 */
 .immersive-editor {
-  /* 动态计算高度：减去 header(57px) 和 meta区域(~145px) */
   height: calc(100vh - 202px) !important; 
   border: none !important;
 }

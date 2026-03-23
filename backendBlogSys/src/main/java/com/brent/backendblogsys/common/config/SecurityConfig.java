@@ -36,7 +36,8 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/forgetpwd",
                                 "/api/article/add",
-                                "/api/article/delete/{id}"
+                                "/api/article/delete/{id}",
+                                "/api/article/getlist"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

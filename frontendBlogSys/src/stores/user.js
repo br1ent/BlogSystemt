@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
                     return resp.data.msg || "登录失败";
                 }
             } catch (err) {
-                return "服务器连接失败";
+                return { code: 500, msg: "网络连接异常" };
             }
         },
 
