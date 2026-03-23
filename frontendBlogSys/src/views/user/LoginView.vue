@@ -35,12 +35,13 @@
 
 
 <script setup>
-import router from '../../router';
 import { useUserStore } from '../../stores/user';
 import { ref } from 'vue';
 import AuthBrand from '../../components/AuthBrand.vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
+const router = useRouter();
 const email = ref("");
 const password = ref("");
 const err_msg = ref("");
@@ -52,10 +53,10 @@ const login = async () => {
         password: password.value,
     });
 
-    if (resp === "success") {
+    if (resp && resp.code === 200) {
         router.push({name: "home"});
     } else {
-        err_msg.value = resp;
+        err_msg.value = resp.msg;
     }
 }
 

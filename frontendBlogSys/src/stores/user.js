@@ -31,7 +31,7 @@ export const useUserStore = defineStore('user', {
                     localStorage.setItem("username", this.username);
                     localStorage.setItem("photo", this.photo);
                     
-                    return "success"
+                    return resp.data
                 } else {
                     return resp.data.msg || "登录失败";
                 }
@@ -48,8 +48,8 @@ export const useUserStore = defineStore('user', {
                     password: data.password,
                     confirmedPassword: data.confirmedPassword,
                 });
-                return resp.data.msg;
 
+                return resp.data;
             } catch(err) {
                 return { code: 500, msg: "网络连接异常" };
             }
@@ -64,7 +64,7 @@ export const useUserStore = defineStore('user', {
                     confirmPassword: data.confirmPassword,
                 });
 
-                return resp.data.msg;
+                return resp.data;
                 
             } catch(err) {
                 return { code: 500, msg: "网络连接异常" };
