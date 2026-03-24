@@ -5,15 +5,15 @@
         <div class="col-12">
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white fw-bold border-bottom-0 pt-3">搜索文章</div>
-            <div class="card-body">
-              <div class="input-group">
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  placeholder="输入关键词..." 
-                  v-model="searchKeyword" 
-                  @keyup.enter="onSearch"
-                >
+              <div class="card-body">
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="输入关键词..." 
+                    v-model="searchKeyword" 
+                    @keyup.enter="onSearch"
+                  >
                 <button class="btn btn-primary px-4" @click="onSearch">搜索</button>
               </div>
             </div>
@@ -96,7 +96,7 @@ const pages = computed(() => {
     start = Math.max(1, end - 4);
   }
 
-  for (let i = start; i <= end; i++) {
+  for (let i = start; i <= end; i ++) {
     new_pages.push({
       number: i,
       is_active: i === currentPage.value

@@ -16,7 +16,11 @@
                     <label class="form-label fw-bold small">密码</label>
                     <input type="password" class="form-control" v-model="password">
                   </div>
-                  <div v-if="err_msg" class="text-danger small mb-2">{{ err_msg }}</div>
+                  <div v-if="err_msg" 
+                  class="text-danger small mb-2" 
+                  style="text-align: center;">
+                    {{ err_msg }}
+                  </div>
                   <button type="submit" class="btn btn-primary w-100 py-2 mt-2">登录</button>
                 </form>
                 
@@ -56,7 +60,7 @@ const login = async () => {
     if (resp && resp.code === 200) {
         router.push({name: "home"});
     } else {
-        err_msg.value = resp.msg;
+        err_msg.value = resp;
     }
 }
 

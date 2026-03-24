@@ -3,16 +3,18 @@ package com.brent.backendblogsys.service.impl.article;
 import com.brent.backendblogsys.mapper.ArticleMapper;
 import com.brent.backendblogsys.pojo.Article;
 import com.brent.backendblogsys.pojo.result.Result;
+import com.brent.backendblogsys.service.article.DeleteArticleService;
 import com.brent.backendblogsys.service.impl.user.UserDetailsImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteArticleService {
+@Slf4j
+public class DeleteArticleServiceImpl implements DeleteArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
@@ -24,8 +26,8 @@ public class DeleteArticleService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         return loginUser.getUser().getId();
     }
-
-    public Result<String> delete(Integer articleId) {
+    @Override
+    public Result<String> deleteArticle(Integer articleId) {
         Article article = articleMapper.selectById(articleId);
 
         if (article == null) {
@@ -43,6 +45,7 @@ public class DeleteArticleService {
         }
 
         articleMapper.deleteById(articleId);
+        log.info("删除文章成功：{}", articleId);
         return Result.success("文章删除成功", null);
     }
 }

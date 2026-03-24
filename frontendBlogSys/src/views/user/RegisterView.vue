@@ -23,7 +23,10 @@
                                     <label for="ConfirmPassword" class="form-label fw-bold small">确认密码</label>
                                     <input type="password" class="form-control" id="ConfirmPassword" v-model="confirmedPassword">
                                 </div>
-                                <div v-if="errMsg" class="alert alert-danger p-2 small mt-2">{{ errMsg }}</div>
+                                <div v-if="errMsg" 
+                                class="alert alert-danger p-2 small mt-2" 
+                                style="text-align: center;">{{ errMsg }}
+                                </div>
                                 <button type="submit" class="btn btn-primary w-100">注册</button>
                             </form>
                             <div class="login mt-3" style="text-align: center">
