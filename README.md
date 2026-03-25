@@ -1,4 +1,4 @@
-#### 学习搭建个人博客系统
+#### 学习搭建个人博客系统（springboot + mybatis-plus + spring-security + JWT + vue3 + js + axions + redis + mysql）
 
 练手项目，如果觉得不错点个`star`吧，谢谢！
 ---
