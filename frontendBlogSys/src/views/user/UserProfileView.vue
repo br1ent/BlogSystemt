@@ -63,9 +63,10 @@
                 v-html="highlight(article.description)"></p>
                 
                 <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
-                   <a class="btn btn-link p-0 text-decoration-none fw-bold text-primary">
+                   <router-link :to="{ path: '/articledetail', query: { id: article.id } }"
+                      class="btn btn-link p-0 text-decoration-none fw-bold text-primary">
                       阅读全文 <i class="bi bi-arrow-right"></i>
-                   </a>
+                   </router-link>
                     <button type="button" 
                     class="btn btn-danger" 
                     @click="prepareDel(article.id)"
