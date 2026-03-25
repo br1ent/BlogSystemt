@@ -24,15 +24,14 @@ public class GetArticleListServiceImpl implements GetArticleListService {
 
         // 如果关键词不为空，则匹配标题或描述
         if (keyword != null && !keyword.isBlank()) {
-            qw.and(wrapper ->
-                    wrapper.like("title", keyword)
-                            .or()
-                            .like("description", keyword)
-            );
+            qw.and(wrapper -> wrapper.like("title", keyword)
+                    .or()
+                    .like("description", keyword));
         }
 
         qw.orderByDesc("id"); // 保持 ID 倒序
         articlePage = articleMapper.selectPage(articlePage, qw);
+
         return Result.success("获取成功", articlePage);
     }
 }

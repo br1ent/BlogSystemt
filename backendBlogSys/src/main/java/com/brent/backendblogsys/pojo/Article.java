@@ -1,4 +1,4 @@
-package com.brent.backendblogsys.pojo;
+﻿package com.brent.backendblogsys.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -22,6 +22,7 @@ public class Article {
     private String title;
     private String description;
     private String content;
+    private String authorName; // 作者用户名，直接存储在数据库中
 
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

@@ -16,7 +16,7 @@ public class AddArticleServiceImpl implements AddArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
-    private Long getCurrentUserId() {
+    private UserDetailsImpl getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 关键逻辑：判断是否真正登录
@@ -26,19 +26,19 @@ public class AddArticleServiceImpl implements AddArticleService {
             throw new RuntimeException("操作失败：用户未登录或登录已过期");
         }
 
-        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
-        return loginUser.getUser().getId();
+        return (UserDetailsImpl) authentication.getPrincipal();
     }
 
     @Override
     public Result<String> add(Article article) {
+        UserDetailsImpl currentUser;
         try {
-            article.setUserId(getCurrentUserId());
+            currentUser = getCurrentUser();
         } catch (RuntimeException e) {
             return Result.fail(e.getMessage());
         }
 
-        if (article.getTitle() == null|| article.getTitle().isEmpty()) {
+        if (article.getTitle() == null || article.getTitle().isEmpty()) {
             return Result.fail("文章标题不能为空!");
         }
 
@@ -46,15 +46,18 @@ public class AddArticleServiceImpl implements AddArticleService {
             return Result.fail("文章标题长度不能超过255!");
         }
 
-        if (article.getDescription() == null|| article.getDescription().isEmpty()) {
+        if (article.getDescription() == null || article.getDescription().isEmpty()) {
             return Result.fail("文章描述不能为空!");
         }
 
-        if (article.getContent() == null|| article.getContent().isEmpty()) {
+        if (article.getContent() == null || article.getContent().isEmpty()) {
             return Result.fail("文章内容不能为空!");
         }
 
-        article.setUserId(getCurrentUserId());
+        // 设置用户ID和作者名字
+        article.setUserId(currentUser.getUser().getId());
+        article.setAuthorName(currentUser.getUser().getUsername());
+
         articleMapper.insert(article);
 
         return Result.success("文章发布成功！", null);

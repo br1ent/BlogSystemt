@@ -5,15 +5,10 @@
         <div class="col-12">
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white fw-bold border-bottom-0 pt-3">搜索文章</div>
-              <div class="card-body">
-                <div class="input-group">
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    placeholder="输入关键词..." 
-                    v-model="searchKeyword" 
-                    @keyup.enter="onSearch"
-                  >
+            <div class="card-body">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="输入关键词..." v-model="searchKeyword"
+                  @keyup.enter="onSearch">
                 <button class="btn btn-primary px-4" @click="onSearch">搜索</button>
               </div>
             </div>
@@ -28,6 +23,10 @@
               <div class="text-muted small mb-2">发布于 {{ article.createTime || '获取时间失败' }}</div>
               <h3 class="card-title h4" v-html="getHighlightedText(article.title)"></h3>
               <p class="card-text text-secondary" v-html="getHighlightedText(article.description)"></p>
+              <div class="author-info text-muted small mt-2">
+                <i class="bi bi-person-fill me-1"></i>
+                作者: {{ article.authorName || '未知作者' }}
+              </div>
               <a href="#" class="btn btn-link p-0 text-decoration-none">阅读全文 →</a>
             </div>
           </div>
@@ -39,15 +38,11 @@
               <li :class="['page-item', currentPage <= 1 ? 'disabled' : '']">
                 <a class="page-link" href="#" @click.prevent="pull_page(currentPage - 1)">上一页</a>
               </li>
-              
-              <li 
-                v-for="page in pages" 
-                :key="page.number" 
-                :class="['page-item', page.is_active ? 'active' : '']"
-              >
+
+              <li v-for="page in pages" :key="page.number" :class="['page-item', page.is_active ? 'active' : '']">
                 <a class="page-link" href="#" @click.prevent="pull_page(page.number)">{{ page.number }}</a>
               </li>
-              
+
               <li :class="['page-item', currentPage * pageSize >= total ? 'disabled' : '']">
                 <a class="page-link" href="#" @click.prevent="pull_page(currentPage + 1)">下一页</a>
               </li>
@@ -77,7 +72,7 @@ const userStore = useUserStore();
 const getHighlightedText = (text) => {
   if (!text) return "";
   if (!lastSearchKeyword.value) return text;
-  
+
   // 使用正则匹配，'gi' 表示全局且不区分大小写
   const reg = new RegExp(`(${lastSearchKeyword.value})`, 'gi');
   return text.replace(reg, '<span class="highlight">$1</span>');
@@ -87,16 +82,16 @@ const getHighlightedText = (text) => {
 const pages = computed(() => {
   let max_pages = Math.ceil(total.value / pageSize.value);
   let new_pages = [];
-  
+
   // 计算起始页和结束页，确保当前页尽量在中间
   let start = Math.max(1, currentPage.value - 2);
   let end = Math.min(max_pages, start + 4);
-  
+
   if (end - start < 4) {
     start = Math.max(1, end - 4);
   }
 
-  for (let i = start; i <= end; i ++) {
+  for (let i = start; i <= end; i++) {
     new_pages.push({
       number: i,
       is_active: i === currentPage.value
@@ -113,30 +108,30 @@ const pull_page = page => {
 
   currentPage.value = page;
   axios.get("http://localhost:8080/api/article/getlist", {
-      params: {
-        page: page,
-        size: pageSize.value,
-        keyword: searchKeyword.value
-  },
-      headers: {
-        Authorization: "Bearer " + userStore.token,
-  }
+    params: {
+      page: page,
+      size: pageSize.value,
+      keyword: searchKeyword.value
+    },
+    headers: {
+      Authorization: "Bearer " + userStore.token,
+    }
   }).then(resp => {
-      if (resp.data.msg === "获取成功" || resp.data.code === 200) {
-        articles.value = resp.data.data.records;
-        total.value = resp.data.data.total;
-        lastSearchKeyword.value = searchKeyword.value;
+    if (resp.data.msg === "获取成功" || resp.data.code === 200) {
+      articles.value = resp.data.data.records;
+      total.value = resp.data.data.total;
+      lastSearchKeyword.value = searchKeyword.value;
     }
   }).catch(err => {
-      console.error("请求失败:", err);
-      if (err.response && err.response.status === 403) {
-          console.error("权限不足或Token失效");
-      }
+    console.error("请求失败:", err);
+    if (err.response && err.response.status === 403) {
+      console.error("权限不足或Token失效");
+    }
   });
 }
 
 const onSearch = () => {
-  currentPage.value = 1; 
+  currentPage.value = 1;
   pull_page(1);
 }
 
@@ -159,14 +154,17 @@ onMounted(() => {
   transition: all 0.3s ease;
   border-radius: 12px;
 }
+
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
+
 .card-title {
   color: #2c3e50;
   font-weight: 600;
 }
+
 .page-link {
   cursor: pointer;
 }

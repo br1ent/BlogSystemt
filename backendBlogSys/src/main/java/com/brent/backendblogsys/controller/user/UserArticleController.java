@@ -16,7 +16,7 @@ public class UserArticleController {
     private UserArticleService userArticleService;
 
     @GetMapping("/user_article")
-    public Result getUserArticles(
+    public Result<?> getUserArticles(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "4") Integer size,
             @RequestParam(required = false) String keyword
