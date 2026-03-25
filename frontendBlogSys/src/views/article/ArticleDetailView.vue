@@ -1,6 +1,13 @@
 ﻿<template>
   <ContentField>
     <div class="container">
+      <div class="row mb-3">
+        <div class="col-12">
+          <button @click="goBack" class="btn btn-outline-secondary">
+            <span class="bi bi-arrow-left me-2"></span>返回
+          </button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-12">
           <div class="card border-0 shadow-sm">
@@ -26,7 +33,7 @@
 <script setup>
 import ContentField from '../../components/ContentField.vue'
 import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useUserStore } from '../../stores/user'
 import { marked } from 'marked'
@@ -34,6 +41,7 @@ import { marked } from 'marked'
 const article = ref({})
 const userStore = useUserStore()
 const route = useRoute()
+const router = useRouter()
 
 const renderedContent = computed(() => {
   if (article.value.content) {
@@ -68,6 +76,10 @@ const getArticleDetail = async (articleId) => {
 const getArticleIdFromUrl = () => {
   // 使用Vue Router的路由参数
   return route.query.id
+}
+
+const goBack = () => {
+  router.back()
 }
 
 onMounted(() => {
