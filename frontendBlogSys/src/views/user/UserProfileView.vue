@@ -114,7 +114,7 @@
         </div>
         <!-- Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title fw-bold text-danger">确认删除</h5>
@@ -124,7 +124,7 @@
                 该操作不可逆，你确定要删除该文章吗？
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" @click="deleteArticle(tempArticleId)">
+                <button type="button" class="btn btn-danger" @click="deleteArticle">
                   确认
                 </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -143,7 +143,7 @@
 import axios from 'axios';
 import { useUserStore } from '../../stores/user';
 import { onMounted, ref, computed } from 'vue';
-import { Modal } from 'bootstrap';
+import { Modal } from 'bootstrap'
 
 const userStore = useUserStore();
 const articles = ref([]);
@@ -177,34 +177,45 @@ const prepareDel = (id) => {
   }
 }
 
-const deleteArticle = async (id) => {
-    if (!tempArticleId.value) return;
+const deleteArticle = async () => {
+    const id = tempArticleId.value;
+    if (!id) return;
 
     try {
         const resp = await axios({
-          url: `http://localhost:8080/api/article/delete/${tempArticleId.value}`,
-          method: "POST",
-          headers: {
-            Authorization: "Bearer " + userStore.token
-          }
+            url: `http://127.0.0.1:8080/api/article/delete/${id}`,
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + userStore.token
+            }
         });
 
         if (resp.data.code === 200) {
             if (deleteModal) {
-              deleteModal.hide();
+                deleteModal.hide();
+                setTimeout(() => {
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
+                    document.body.classList.remove('modal-open');
+                }, 300);
             }
 
-            articleList(currentPage.value); // 刷新列表
+            const isLastOne = articles.value.length === 1 && currentPage.value > 1;
+            const pageToRequest = isLastOne ? currentPage.value - 1 : currentPage.value;
+            
+            await articleList(pageToRequest); 
         } else {
-            alert(resp.data.msg || "删除失败！")
+            alert(resp.data.msg || "删除失败！");
         }
     } catch(err) {
+        console.error("删除请求失败:", err);
         alert("网络异常，请稍后再试");
-        console.log(err);
     } finally {
         tempArticleId.value = null;
     }
-}
+};
 
 const articleList = async (page) => {
   // 边界处理
@@ -261,11 +272,7 @@ const highlight = (text) => {
 
 onMounted(() => {
   articleList(1);
-  const delModal = document.getElementById('deleteConfirmModal')
-  if (delModal)
-  {
-    deleteModal = new Modal(document.getElementById('deleteConfirmModal'))
-  }
+  deleteModal = new Modal(document.getElementById('deleteConfirmModal'))
 });
 </script>
 
