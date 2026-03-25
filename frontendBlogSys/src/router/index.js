@@ -3,6 +3,7 @@ import { useUserStore } from '../stores/user'
 
 const ArticleView = () => import('../views/article/ArticleView.vue')
 const HomeView = () => import('../views/article/HomeView.vue')
+const ArticleDetailView = () => import('../views/article/ArticleDetailView.vue')
 const UserProfileView = () => import('../views/user/UserProfileView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
 const LoginView = () => import('../views/user/LoginView.vue')
@@ -27,6 +28,15 @@ const routes = [
     component: ArticleView,
     meta: {
       title: "所有文章",
+      requestAuth: true,
+    }
+  },
+  {
+    path: '/articledetail',
+    name: 'articledetail',
+    component: ArticleDetailView,
+    meta: {
+      title: "文章详情",
       requestAuth: true,
     }
   },

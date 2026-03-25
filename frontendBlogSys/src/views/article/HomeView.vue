@@ -27,7 +27,8 @@
                 <i class="bi bi-person-fill me-1"></i>
                 作者: {{ article.authorName || '未知作者' }}
               </div>
-              <a href="#" class="btn btn-link p-0 text-decoration-none">阅读全文 →</a>
+              <router-link :to="{ path: '/articledetail', query: { id: article.id } }"
+                class="btn btn-link p-0 text-decoration-none">阅读全文 →</router-link>
             </div>
           </div>
 
